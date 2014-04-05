@@ -1,0 +1,34 @@
+osobnik -> jeden podzial glownego zbioru
+populacja -> n osobnikow
+pokolenie -> populacja na danym poziomie
+
+iteracja -> kolejne losowanie populacji poczakowej
+
+kzyzowanie -> wziecie zbiorow o najmniejszym bledzie z dwojga rodzicow
+           -> rozdzielenie pozostalych elementow po zbiorach zgodnie 
+              z ich bledem
+
+mutacja    -> randomowe przenoszenie elementow zbioru dla nowego osobnika
+              do randomowego zbioru
+              przebiega w zaleznosci od prawodpodobienstwa
+              im bardziej bledny podzial tym wiecej mitacji
+
+
+blad -> odleglosc sumy elementow zbioru od glownego zbioru
+określenie głębokości -> liczby kolejnych pokolen wywiedzonych z bazowego
+
+Kazde pokolenie ma stworzyc tyle samo osobnikow do nowego pokolenia
+Jako rodzicow wybieramy poczatkowe osobniki z najmniejszym bledem
+
+ZBIOR : elemetenty bez powtórzeń, zakladamy podzial na k roznych zbiorow
+1) reprezentacja zbioru
+2) reprezentacja osobnika (podzialu zbioru na K zbiorow)
+    - funkcja oceniajaca
+3) sortowanie osobnika
+4) zaimplementowanie mutacji dla osobnika
+5) zaimplementowanie krzysowania dla pokolenia
+6) main loop
+
+*wczytanie z pliku
+*wczytanie od pliku
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.107.5397&rep=rep1&type=pdf
