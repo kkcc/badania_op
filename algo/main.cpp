@@ -22,6 +22,27 @@ int* load_from_file(const char* filename ){
     return tab;
 }
 
+bool save_to_file(const char* filename, Individual ind){
+   
+   ofstream fs(filename);
+
+   ind[0].to_stream(std::cout);
+
+   if( fs.is_open() ){
+        //for(Set* s=ind; s<&ind[SUBSETS-1]; s++ ){
+        for(int i=0; i<SUBSETS; i++ ){
+            printf("*****\n");
+            ind[i].to_stream(fs);
+            fs<<"\n";
+        }
+    
+   fs.close();
+   }
+   else return false;
+
+   return true;
+}
+
 
 int* spawn_random_elements(){
     
@@ -48,11 +69,9 @@ long long total_sum = 0;
 
 /* tworzenie zbioru */
 Set s1(el,ELEMENTS_TOTAL);
+free(el);
 
-
-for(int i=0; i<s1.size(); i++){
-    total_sum += s1[i];
-}
+total_sum = s1.sum();
 IDEAL_SET = total_sum / SUBSETS;
 
 
@@ -69,11 +88,15 @@ std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<"0"<<" \\\\\\\\\\\\\\\\
         for(int g_depth=0; g_depth<MAX_GENERATIONS; g_depth++){
             std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<g_depth+1<<" \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
             generation = evolve(generation);
-      exit(1) ;
+            
+            bool x = save_to_file("out.txt",generation[0]);
+            //int i = x == true ? EXIT_SUCCESS : EXIT_FAILURE;
+      exit(i) ;
         }
 
 }
 /*zapis do pliku */
+save_to_file("out.txt",generation[0]);
 s1.to_stream(std::cout);
 
 

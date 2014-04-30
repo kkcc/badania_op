@@ -1,4 +1,5 @@
 osobnik -> jeden podzial glownego zbioru
+if ( 2 == 2 ) {
 populacja -> n osobnikow
 pokolenie -> populacja na danym poziomie
 

@@ -3,16 +3,21 @@
 
 int Set::pop_rand(){
     int index  = rand() % size();
-    int tmp    = elements.at(index);
-    elements.at(index) = *(elements.end()-1);
-    elements.erase(elements.end()-1);
+    int tmp;
+    int i;
+    std::set<int>::iterator it;
+    for( it=elements.begin(); i!=index; i++, it++ );
+
+    tmp = *it;
+    elements.erase(it);
     return tmp;
+    
 }
 
 long int Set::sum(){
     long int tmp  = 0;
-    for(int i=0; i<this->size(); i++){
-        tmp += (*this)[i];
+    for(std::set<int>::iterator i=elements.begin(); i!=elements.end(); i++){
+        tmp += *i;
     }
 
     return tmp;
@@ -20,12 +25,12 @@ long int Set::sum(){
 
 Set::Set(int * nums, int size){
     for(int i=0; i<size; i++)
-        elements.push_back(nums[i]);
+        elements.insert(nums[i]);
 }
 
 ostream& Set::to_stream(ostream& os, string sep){
 
-    for(vector<int>::iterator it = elements.begin(); it!= elements.end() ; it++ ){
+    for(set<int>::iterator it = elements.begin(); it!= elements.end() ; it++ ){
         os<<*it<<sep;
     }
 
