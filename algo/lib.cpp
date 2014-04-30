@@ -61,6 +61,8 @@ Generation random_generation(Set s){
     return gen;
 }
 
+
+//TODO
 int* choose_parents(const Generation gen, const int max_parent_index, long int total_fitness ){
 
     double map[ max_parent_index+1 ];
@@ -123,10 +125,12 @@ Generation evolve(Generation old_gen){
     return new_gen;                   //return new_generation (size equal to old one
 }
 
+
+//TODO
 Individual crossover(Individual i1, Individual i2){
 
 };
-
+//TODO
 void mutation(Generation old_gen, Generation new_gen){
 
 };
