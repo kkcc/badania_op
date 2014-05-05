@@ -1,3 +1,7 @@
+KOMPILACJA: g++ *.cpp 
+  lub
+g++ set.cpp lib.cpp main.cpp
+
 osobnik -> jeden podzial glownego zbioru
 populacja -> n osobnikow
 pokolenie -> populacja na danym poziomie
