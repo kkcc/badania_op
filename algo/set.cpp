@@ -4,7 +4,7 @@
 int Set::pop_rand(){
     int index  = rand() % size();
     int tmp;
-    int i;
+    int i=0;
     std::set<int>::iterator it;
     for( it=elements.begin(); i!=index; i++, it++ );
 
@@ -14,7 +14,7 @@ int Set::pop_rand(){
     
 }
 
-long int Set::sum(){
+long int Set::sum() const {
     long int tmp  = 0;
     for(std::set<int>::iterator i=elements.begin(); i!=elements.end(); i++){
         tmp += *i;

@@ -6,7 +6,9 @@
     #include <ctime>
     #include <fstream>
     #include <cmath>
-    
+    #include <new>
+    #include <iostream>
+
     #include "set.h"
 
     #define ELEMENTS_TOTAL 15
@@ -15,7 +17,9 @@
     #define ITERATIONS 20              //maximal number of iterations = number of initial generations
     #define INDIVIDUALS 100             //number of individuals in each generation
     #define SURVIVORS 0.10
+   
 
+   using namespace std;
 /* 
   GENERATION
  
@@ -41,12 +45,13 @@ typedef Set* Individual;
 Generation evolve(Generation old_gen);
 Generation random_generation(Set s);
 
+Individual copy_ind(Individual oldind);
 Individual crossover(Individual,Individual);
-void mutation(Generation old_gen , Generation new_gen);
-int rate_set(Set s, long long goal);
-int rate_individual(Individual);
-int compare(const void* a, const void* b);
+void mutation(Individual);
+int  rate_set(Set s, long long goal);
+int  rate_individual(Individual);
+bool del(int el);
+int  compare(const void* a, const void* b);
 
-void deallocate(Generation gen);
 
 #endif

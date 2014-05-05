@@ -3,6 +3,9 @@
 #include "set.h"
 #include "lib.h"
 
+long int best=9999999;
+
+Set input;  //input subset    
 int IDEAL_SET;
 
 int* load_from_file(const char* filename ){
@@ -33,7 +36,7 @@ bool save_to_file(const char* filename, Individual ind){
         for(int i=0; i<SUBSETS; i++ ){
             printf("*****\n");
             ind[i].to_stream(fs);
-            fs<<"\n";
+    ;        fs<<"\n";
         }
     
    fs.close();
@@ -64,11 +67,14 @@ int main(int argc, char* argv[]){
 //int el[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 Generation generation;
 //int* el = spawn_random_elements();
-    int *el = load_from_file("set.txt");
+
+int *el = load_from_file("set.txt");
 long long total_sum = 0;
 
 /* tworzenie zbioru */
 Set s1(el,ELEMENTS_TOTAL);
+input = s1;
+
 free(el);
 
 total_sum = s1.sum();
@@ -89,15 +95,17 @@ std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<"0"<<" \\\\\\\\\\\\\\\\
             std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<g_depth+1<<" \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
             generation = evolve(generation);
             
-            bool x = save_to_file("out.txt",generation[0]);
+          //  bool x = save_to_file("out.txt",generation[0]);
             //int i = x == true ? EXIT_SUCCESS : EXIT_FAILURE;
-      exit(i) ;
+     // exit(i) ;
         }
 
 }
 /*zapis do pliku */
+
 save_to_file("out.txt",generation[0]);
 s1.to_stream(std::cout);
 
+std::cout<<"BEST WAS: "<<best<<"\n";
 
 }
