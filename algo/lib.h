@@ -11,11 +11,10 @@
 
     #include "set.h"
 
-    #define ELEMENTS_TOTAL 15
     #define MAX_GENERATIONS 50         //depth of generation tree to be derived from initial generation
     #define SUBSETS 6                  //number of subsets to which main set will be partitioned
     #define ITERATIONS 20              //maximal number of iterations = number of initial generations
-    #define INDIVIDUALS 100             //number of individuals in each generation
+    #define INDIVIDUALS 500             //number of individuals in each generation
     #define SURVIVORS 0.10
    
 
@@ -45,6 +44,7 @@ typedef Set* Individual;
 Generation evolve(Generation old_gen);
 Generation random_generation(Set s);
 
+void print_ind(Individual);
 Individual copy_ind(Individual oldind);
 Individual crossover(Individual,Individual);
 void mutation(Individual);

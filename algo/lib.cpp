@@ -1,7 +1,7 @@
 #include "lib.h"
+#include <map>
+#include <climits>
 
-
-extern long int best;
 extern Set input;  //input subset    
 
 int abs(int a){ return a<0 ? -a : a; }
@@ -37,7 +37,6 @@ Generation random_generation(Set s){
     
     srand(time(NULL));
     
-
     for(int i=0; i<INDIVIDUALS; i++,s=copy){ //Random individuals (Set partitions)
     std::cout<<"++++++++++++ NEXT INDIVIDUAL +++++++++++++++++\n";
         gen[i]=new Set[ SUBSETS ];
@@ -70,23 +69,17 @@ int* choose_parents(const long int fitnesses[], long int total_fitness, int pair
     int* parents = new int[ pairs_needed*2 ]; // [ Parent1a,Parent1b,Parent2a,Parent2b...] 
 
     for(int i=0; i< INDIVIDUALS; i++){                    //count probability for each ind to be parent
-        map[i] = total;
         total += double(fitnesses[i])/(double)total_fitness;
+        map[i] = total;
     }
 
-    for(int i=0; i< INDIVIDUALS ; i++){
-        std::cout<<i+1<<" : "<<map[i]<<"\n";
-    }
-    
 
-    for(int i = 0; i<pairs_needed; i++){                
+    for(int i = 0; i<pairs_needed*2; i+=2){                
         double prob_p1 = (double) rand() / RAND_MAX;       //parents for the current mutation
        
         int pind1 = 1, pind2 = 1;
         while( prob_p1 > map[ pind1 ] ) pind1++;
         parents[i] = pind1-1;
-        
-      //  std::cout<<"P1:"<<parents[i];
         
         do{
             double prob_p2 = (double) rand() / RAND_MAX;
@@ -95,8 +88,8 @@ int* choose_parents(const long int fitnesses[], long int total_fitness, int pair
             parents[i+1] = pind2-1;
         }while(pind1==pind2); //reject Px + Px 
 
-   //     std::cout<<"P2:"<<parents[i+1]<<endl;
     }
+
 return parents;
 }
 
@@ -105,31 +98,27 @@ Generation evolve(Generation old_gen){
     Generation  new_gen     = new Individual[ INDIVIDUALS ]; //each generation has equal number of individuals
     long int* fitnesses     = new long int[ INDIVIDUALS ];
     long int  total_fitness = 0; 
-    int*      parents       = 0;
+    int*      parents       = NULL;
     int survived = SURVIVORS * INDIVIDUALS;
 
     qsort(old_gen, INDIVIDUALS ,sizeof(Set*),compare); //sort to get best individuals on the beginnig
     long int highest_error = rate_individual( old_gen[ INDIVIDUALS-1] );
-     
-    long int err = 0;
-    if( rate_individual( old_gen[0]) < best )
-       best = rate_individual( old_gen[0]);
+    long int lowest_error  = rate_individual( old_gen[0]); 
 
-    if(best == 0) exit(1);
-
+    if(lowest_error == 0 ) {
+        print_ind(old_gen[0]);
+        exit(EXIT_SUCCESS);
+    }
     /////////////
-    
+
     for(int i=0; i<INDIVIDUALS; i++){ //rate old generation
-        fitnesses[i] = highest_error + 1 - rate_individual(old_gen[i]);
+        fitnesses[i]  = highest_error + 1 - rate_individual(old_gen[i]);
         total_fitness += fitnesses[i];
-        
- //       std::cout<<"OCENA: "<<rate_individual( old_gen[i] )<<"\n";
- //       std::cout<<"R"<<i+1<<": "<<fitnesses[i]<<"\n";  //choos beste individuals for further generations
 
     }
     ///////////
 
-    parents = choose_parents(fitnesses,  total_fitness, INDIVIDUALS-survived );
+    parents = choose_parents(fitnesses,  total_fitness, INDIVIDUALS-survived+2 );
     int i,anc=0;
     for(i=0; i<survived; i++){ //save best individuals
         new_gen[i] = copy_ind( old_gen[i] );
@@ -140,17 +129,17 @@ Generation evolve(Generation old_gen){
         new_gen[i] = crossover( old_gen[ parents[anc] ],old_gen[ parents[anc+1] ]  ) ;
         anc += 2;
     } 
-
     
     //TODO mutacja zgodnie z zaleznioscia w pdfie
-    mutation(  old_gen[0] );                //mutations with random chanse bigger if big error
+    //mutation(  old_gen[0] );                //mutations with random chanse bigger if big error
     //
     //
-    
+
+
     /* clean up */
     for(int i=0; i<INDIVIDUALS; i++ ) delete [] old_gen[i];
     delete [] old_gen;             //clean up
-    delete [] parents;
+    delete [] parents; parents = NULL;
     delete [] fitnesses;
 
     return new_gen;                   //return new_generation (size equal to old one
@@ -167,40 +156,91 @@ Individual copy_ind(Individual oldind){
 //Copy sets with least error to new child from both parents
 //Values that were not copied deliver according to error
 //Values that appear twice delete according to error
-//TODO wartosci ktore pojawiaja sie podwojnie ( skopiowane z rodzica 1 i rodzica 2)
-//trzeba wykasowac -> usuwamy wartosc zgodnie z błędem zbioru
-//TODO wartosci ktore nie zostaly odziedziczone po zadnym z rodzicow, trzeba rozrzucic po podzbiorach dziecka
-//zgodnie z bledem -> wieksze wartosci wrzucamy to zbiorow ktore maja za mala sume w stosunku do idealnej
 //mniej do tych ktorym brakuje mniej
 Individual crossover(Individual par1, Individual par2){
     Individual newind = new Set[SUBSETS];
-    Set copy = input;
+    Set tmp,copy = input;
     int p1diff, p2diff;
- 
-    for(int i=0; i<SUBSETS; i++){
+    map<int,int> where_is;
+
+    for(int i=0,p1=0,p2=0; i<SUBSETS; i++){
         
-        p1diff = abs( rate_set(par1[i], IDEAL_SET) );
-        p2diff = abs( rate_set(par2[i], IDEAL_SET) );
+        p1diff = abs( rate_set(par1[p1], IDEAL_SET) );
+        p2diff = abs( rate_set(par2[p2], IDEAL_SET) );
 
-        if(p1diff>p2diff){
-            newind[i] = par2[i];
-        }else if(p1diff<p2diff) { 
-            newind[i] = par1[i];
-         }
-        else{
-            if( rand()%1)
-                newind[i] = par2[i];
-            else
-                newind[i] = par1[i];
+        if(p1diff>p2diff) { //TODO refactoring
+            newind[i] = p2<SUBSETS ? par2[p2++] : par1[p1++];
+        } else if(p1diff<p2diff) { 
+            newind[i] = p1<SUBSETS ? par1[p1++] : par2[p2++];
+        } else {
+            if( p1!=SUBSETS && p2!=SUBSETS ) {
+                if( rand()%2 )
+                    newind[i] = par2[p2++];
+                else
+                    newind[i] = par1[p1++];
+            }else
+                    newind[i] = p1<SUBSETS ? par1[p1++] : par2[p2++];
         }
+         
+        tmp = newind[i];  //to avoid the iterators mess used by get_next
+        for(int el=0; el<newind[i].size(); el++ ){
+            int val = tmp.get_next();
 
+            copy.del( val );
+            if( where_is.find( val ) == where_is.end() ){ //wasn't previously assigned
+                where_is[val] = i;
+            }
+            else{
+               //attempt to copy the same value twice, one will be deleted to cause less error
+                p1diff = abs(IDEAL_SET - newind[where_is[val]].sum() + val ) ;
+                p2diff = abs(IDEAL_SET - newind[i].sum() + val ) ;
+
+                if(p1diff < p2diff)
+                    newind[where_is[val]].del(val);
+                else if(p1diff > p2diff ) {
+                    newind[i].del(val);
+                }
+                else{
+                    if( rand()%2 )
+                        newind[where_is[val]].del(val);
+                    else
+                        newind[i].del(val);
+
+                }
+                
+            }
+        }
+   }
+   //distribute remaining values between sets 
+   tmp = copy;  
+   for(int i=copy.size(); i>0; i--){
+        int  min_ind = -1;
+        long min_err = LONG_MAX;
+        int  err     = 0;
+        
+        int val = tmp.get_next();
+        for(int s=0; s<SUBSETS; s++){
+            if(min_err > ( err = abs( IDEAL_SET - newind[s].sum() - val ) ) ) {
+                min_err = err;
+                min_ind = s;
+            }
+        }
+        
+        newind[ min_ind ].add(val);
+        copy.del(val);
    }
 
     return newind;
 };
 
 
+void print_ind(Individual ind){
 
+    for(int i=0; i<SUBSETS; i++){
+        ind[i].to_stream(std::cout);
+        std::cout<<"\n";
+    }
+}
 
 void mutation(Individual ind){
 //one random value from random subset moved to random subset :D
