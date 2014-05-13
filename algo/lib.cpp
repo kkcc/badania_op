@@ -126,7 +126,7 @@ Generation evolve(Generation old_gen){
         new_gen[i] = copy_ind( old_gen[i] );
     }
 
-    
+    /* CROSSOVER */ 
     for(; i<INDIVIDUALS; i++){ //produce remaining them with crossover between best parents
         new_gen[i] = crossover( old_gen[ parents[anc] ],old_gen[ parents[anc+1] ]  ) ;
         anc += 2;
@@ -141,15 +141,14 @@ Generation evolve(Generation old_gen){
     for(i=0; i<INDIVIDUALS; i++){
      
         printf("ITER\n");
-        if(i<survived) //10% best individuals
-            for(nmut=1; nmut>0; nmut--)  if(rand() % 2 ){ printf("#1");mutation(new_gen[i]);}
-        else if( i<int(INDIVIDUALS*0.50) ) //10-50 best individuals
-            for(nmut=4; nmut>0; nmut--)  if(rand() % 2 ) { printf("#2");mutation(new_gen[i]);}
-        else if( i<int(INDIVIDUALS*0.70) ) //50-70 best individuals
-            for(nmut=10; nmut>0; nmut--) if(rand() % 2 ) { printf("#3");mutation(new_gen[i]);}
-        else  //70-100 best individuals
-            for(nmut=20; nmut>0; nmut--) if(rand() % 2 ) { printf("#4");mutation(new_gen[i]);}
-        printf("CO KURWAA");
+        if(i<survived) {//10% best individuals
+            for(nmut=1; nmut>0; nmut--)  if(!(rand() % 10) ){ printf("#1");mutation(new_gen[i]);}
+        }else if( i<int(INDIVIDUALS*0.50) ){ //10-50 best individuals
+            for(nmut=4; nmut>0; nmut--)  if( rand() % 2   ) { printf("#2");mutation(new_gen[i]);}
+        }else if( i<int(INDIVIDUALS*0.70) ){//50-70 best individuals
+            for(nmut=10; nmut>0; nmut--) if( rand() % 2   ) { printf("#3");mutation(new_gen[i]);}
+        }else  //70-100 best individuals
+            for(nmut=20; nmut>0; nmut--) if( rand() % 2  ) { printf("#4");mutation(new_gen[i]);}
     }
 
 
@@ -261,20 +260,17 @@ void print_ind(Individual ind){
 
 void mutation(Individual ind){
 //one random value from random subset moved to random subset :D
-printf("INSIDE\n");
-
-    int n_subset = rand() % SUBSETS;
-printf("einz");    
-    Set* set    = &ind[n_subset];
-printf("zwei");    
-    int el      = set->pop_rand();
-printf("drei");    
-    n_subset    = rand() % SUBSETS;
-printf("fier");    
-    set         = &ind[n_subset];
-printf("funf");    
+    int el=0,n_subset;
+    Set *set;
+    while(el==0){
+        n_subset = rand() % SUBSETS;
+        set      = &ind[n_subset];
+        el       = set->pop_rand();
+    }; 
+    n_subset = rand() % SUBSETS;
+    set      = &ind[n_subset];
     set->add(el);
+    
 
-printf("OUTINSIDE\n");
 };
 

@@ -11,10 +11,10 @@
 
     #include "set.h"
 
-    #define MAX_GENERATIONS 55         //depth of generation tree to be derived from initial generation
+    #define MAX_GENERATIONS 200         //depth of generation tree to be derived from initial generation
     #define SUBSETS 6                  //number of subsets to which main set will be partitioned
     #define ITERATIONS 20              //maximal number of iterations = number of initial generations
-    #define INDIVIDUALS 1000             //number of individuals in each generation
+    #define INDIVIDUALS 500             //number of individuals in each generation
     #define SURVIVORS 0.10
    
 

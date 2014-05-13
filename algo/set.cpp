@@ -2,7 +2,11 @@
 #include <cstdlib>
 
 int Set::pop_rand(){
-    int index  = rand() % size();
+    int set_size  = size();
+    
+    if(set_size == 0 ) return 0; //to handle the exception of rand()%0
+    
+    int index  = rand() % set_size;
     int tmp;
     int i=0;
     std::set<int>::iterator it;
