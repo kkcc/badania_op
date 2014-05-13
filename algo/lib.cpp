@@ -133,9 +133,24 @@ Generation evolve(Generation old_gen){
     } 
     
     //TODO mutacja zgodnie z zaleznioscia w pdfie
-    //mutation(  old_gen[0] );                //mutations with random chanse bigger if big error
     //
-    //
+    int nmut;
+    qsort(old_gen, INDIVIDUALS ,sizeof(Set*),compare); //sort to get best individuals on the beginnig
+    printf("#########SURVIVED: %d\n",survived);
+    srand(highest_error);
+    for(i=0; i<INDIVIDUALS; i++){
+     
+        printf("ITER\n");
+        if(i<survived) //10% best individuals
+            for(nmut=1; nmut>0; nmut--)  if(rand() % 2 ){ printf("#1");mutation(new_gen[i]);}
+        else if( i<int(INDIVIDUALS*0.50) ) //10-50 best individuals
+            for(nmut=4; nmut>0; nmut--)  if(rand() % 2 ) { printf("#2");mutation(new_gen[i]);}
+        else if( i<int(INDIVIDUALS*0.70) ) //50-70 best individuals
+            for(nmut=10; nmut>0; nmut--) if(rand() % 2 ) { printf("#3");mutation(new_gen[i]);}
+        else  //70-100 best individuals
+            for(nmut=20; nmut>0; nmut--) if(rand() % 2 ) { printf("#4");mutation(new_gen[i]);}
+        printf("CO KURWAA");
+    }
 
 
     /* clean up */
@@ -246,14 +261,20 @@ void print_ind(Individual ind){
 
 void mutation(Individual ind){
 //one random value from random subset moved to random subset :D
+printf("INSIDE\n");
 
     int n_subset = rand() % SUBSETS;
-    
+printf("einz");    
     Set* set    = &ind[n_subset];
+printf("zwei");    
     int el      = set->pop_rand();
+printf("drei");    
     n_subset    = rand() % SUBSETS;
+printf("fier");    
     set         = &ind[n_subset];
+printf("funf");    
     set->add(el);
 
+printf("OUTINSIDE\n");
 };
 
