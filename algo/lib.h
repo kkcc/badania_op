@@ -11,10 +11,10 @@
 
     #include "set.h"
 
-    #define MAX_GENERATIONS 50         //depth of generation tree to be derived from initial generation
+    #define MAX_GENERATIONS 55         //depth of generation tree to be derived from initial generation
     #define SUBSETS 6                  //number of subsets to which main set will be partitioned
     #define ITERATIONS 20              //maximal number of iterations = number of initial generations
-    #define INDIVIDUALS 500             //number of individuals in each generation
+    #define INDIVIDUALS 10000             //number of individuals in each generation
     #define SURVIVORS 0.10
    
 
@@ -48,8 +48,9 @@ void print_ind(Individual);
 Individual copy_ind(Individual oldind);
 Individual crossover(Individual,Individual);
 void mutation(Individual);
-int  rate_set(Set s, long long goal);
-int  rate_individual(Individual);
+long int  rate_set(Set s, const long int goal);
+long int  rate_individual(Individual);
+long int absolute(long int);
 bool del(int el);
 int  compare(const void* a, const void* b);
 

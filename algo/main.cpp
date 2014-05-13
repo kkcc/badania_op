@@ -71,7 +71,9 @@ Generation generation;
 int ELEMENTS_TOTAL = 0;
 //int* el = spawn_random_elements();
 
-int *el = load_from_file("set.txt", &ELEMENTS_TOTAL);
+int *el;
+
+el = argc<2 ? load_from_file("set.txt", &ELEMENTS_TOTAL) : load_from_file(argv[1],&ELEMENTS_TOTAL);
 long long total_sum = 0;
 
 /* tworzenie zbioru */
@@ -96,8 +98,10 @@ std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<"0"<<" \\\\\\\\\\\\\\\\
         //* 
         for(int g_depth=0; g_depth<MAX_GENERATIONS; g_depth++){
             std::cout<<"//////////////////// GENERATION "<<i+1<<"."<<g_depth+1<<" \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
+                printf("CURRENT BEST :\n");
+                print_ind(generation[0]);
+                printf("\n\n");
             generation = evolve(generation);
-            
         }
 
 }

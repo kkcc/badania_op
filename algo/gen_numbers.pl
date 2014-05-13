@@ -2,7 +2,7 @@
 $how_many = $ARGV[0] || 25;
 
 
-$nice_sum = 10000;
+$nice_sum = 100;
 @out;
 %map;
 

@@ -4,10 +4,10 @@
 
 extern Set input;  //input subset    
 
-int abs(int a){ return a<0 ? -a : a; }
+long int absolute(long int a){ return a<0 ? -a : a; }
 
-int rate_individual(const Individual in){
-    int diff_total = 0;
+long int rate_individual(const Individual in){
+    long long int diff_total = 0;
     for(int i=0; i<SUBSETS; i++){
         diff_total += pow(rate_set(in[i],IDEAL_SET),2);
     }
@@ -15,12 +15,12 @@ int rate_individual(const Individual in){
 return pow(diff_total,2);
 }
 
-int rate_set(const Set s,const long long goal ){
+long int rate_set(const Set s,const long int goal ){
     return s.sum()-goal;
 }
 
 int compare(const void* a, const void* b){
-    return rate_individual(*(Individual*)a) - rate_individual(*(Individual*)b);
+    return int(rate_individual(*(Individual*)a) > rate_individual(*(Individual*)b));
 }
 
 
@@ -112,7 +112,9 @@ Generation evolve(Generation old_gen){
     /////////////
 
     for(int i=0; i<INDIVIDUALS; i++){ //rate old generation
-        fitnesses[i]  = highest_error + 1 - rate_individual(old_gen[i]);
+   long int tmp;
+        fitnesses[i]  = highest_error + 1 - (tmp=rate_individual(old_gen[i]));
+   //     printf("highest_error = %ld, rate_ind = %lld,  fitnesses[%d] = %ld\n",highest_error,tmp,i,*(fitnesses+i));
         total_fitness += fitnesses[i];
 
     }
@@ -165,8 +167,8 @@ Individual crossover(Individual par1, Individual par2){
 
     for(int i=0,p1=0,p2=0; i<SUBSETS; i++){
         
-        p1diff = abs( rate_set(par1[p1], IDEAL_SET) );
-        p2diff = abs( rate_set(par2[p2], IDEAL_SET) );
+        p1diff = absolute( rate_set(par1[p1], IDEAL_SET) );
+        p2diff = absolute( rate_set(par2[p2], IDEAL_SET) );
 
         if(p1diff>p2diff) { //TODO refactoring
             newind[i] = p2<SUBSETS ? par2[p2++] : par1[p1++];
@@ -192,8 +194,8 @@ Individual crossover(Individual par1, Individual par2){
             }
             else{
                //attempt to copy the same value twice, one will be deleted to cause less error
-                p1diff = abs(IDEAL_SET - newind[where_is[val]].sum() + val ) ;
-                p2diff = abs(IDEAL_SET - newind[i].sum() + val ) ;
+                p1diff = absolute(IDEAL_SET - newind[where_is[val]].sum() + val ) ;
+                p2diff = absolute(IDEAL_SET - newind[i].sum() + val ) ;
 
                 if(p1diff < p2diff)
                     newind[where_is[val]].del(val);
@@ -220,7 +222,7 @@ Individual crossover(Individual par1, Individual par2){
         
         int val = tmp.get_next();
         for(int s=0; s<SUBSETS; s++){
-            if(min_err > ( err = abs( IDEAL_SET - newind[s].sum() - val ) ) ) {
+            if(min_err > ( err = absolute( IDEAL_SET - newind[s].sum() - val ) ) ) {
                 min_err = err;
                 min_ind = s;
             }
