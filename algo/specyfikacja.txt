@@ -1,0 +1,43 @@
+* Gui w dowolnym jezyku bedzie wywolywalo glowny program napisany w C++ w formie
+   "sciezka/program plik1 x1 x2 x3 x4 x5 x6"
+
+	plik1 - plik w ktorym bede pobrane z gui liczby reprezentujace zbior ktory dzielimy, oddzielone spacjami, bez znakow nowej lini
+		np: "1 3 4 5 6 7 8 9 12 112"
+
+	x1 - x6 to liczby calkowite:
+	x1 - liczba iteracji , ile razy losujemy pokolenie poczatkowe
+	x2 - liczba pokolen , ile mutacji,krzyzowan przeprwadzamy na pokoleniu bazowym, inaczej ile generacji z jedenj generacji
+	x3 - liczebnosc populacji w kazdym pokoleniu
+	x4 - liczba zbiorow, na jakie dzielimy zbior wejsiowy by uzyskac max roznice sum = x5 (musi byc mniejsza od liczby elementow)
+	x5 - dok³adnoœæ, czyli jaka odleg³oœæ od idealnej sumy spowoduje przerwanie algorytmu (0 dla szukania idealnego rozwiazania
+	x6 - procent osobnikow przezywajacych automatycznie do nastepnego pokolenia
+
+* gui ma dokonywac walidacji argumentow przed przeslaniem ich do programu
+
+g³ówna pentla gui to cos w rodzaju
+
+
+while 1
+	plik1 = pobierz_zbior();          //wprowadzenie lub randomowa generacja zbioru, jest skrypt w perlu w katalogu jak trza
+	x1 = pobierz_paramery();          //pobranie nastawow dla algorytmu, bazowe sa w pliku c++ programu wiec damy je do gui 
+	.....
+	x6 = pobierz_parametry();
+	system_odpal("sciezka/program plik1 x1 x2 x3 x4 x5 x6"); //odpalamy program z glownym algorytmem dla zadanych param
+	wynik = czytaj_wynik("plik2");
+	prezentacja_wyniku(wynik);
+end
+
+* format pliku wyjsciowego :
+x11 x12 x13 x14 ...              //linia zawierajaca oddzialone spacjami liczby - elementy pierwszego zbioru z najlepszego podzialu
+x21 x22 x23 x24 ...		 //to samo...
+.     . . . 
+. . . 
+.
+xn1 xn2 xn3 xn4 ...	         //ostatni ze zbiorow z najlepszego podzialu, po kazdym byla nowa linia
+				 //pusta linijka
+nr_generacji nr_pokolenia        //nr gen -> z ktorej populacji bazowej, nr_pokolenia po ilu mutacjach i krzyzowaniach znaleziono
+
+
+Jednym slowem, najpierw elementy zbiorow oddzielone spacjami potem pusta linia  i dwa parametry mowiace o wyniku
+
+ustalamy nazwy input.txt dla wejscia i output.txt dla wyjscia programu w C++
