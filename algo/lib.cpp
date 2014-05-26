@@ -180,13 +180,13 @@ Generation evolve(Generation old_gen){
     for(i=0; i<ARGS[NIND]; i++){
      
         if(i<survived) {//10% best individuals
-            for(nmut=1; nmut>=0; nmut--)  if(!(rand() % 10) ) mutation(new_gen[i]);
+            for(nmut=1; nmut>0; nmut--)  if(!(rand() % 10) ) mutation(new_gen[i]);
         }else if( i<int(ARGS[NIND]*0.50) ){ //10-50 best individuals
-            for(nmut=4; nmut>=0; nmut--)  if( rand() % 2   )  mutation(new_gen[i]);
+            for(nmut=4; nmut>0; nmut--)  if( rand() % 2   )  mutation(new_gen[i]);
         }else if( i<int(ARGS[NIND]*0.70) ){//50-70 best individuals
-            for(nmut=10; nmut>=0; nmut--) if( rand() % 2   )  mutation(new_gen[i]);
+            for(nmut=10; nmut>0; nmut--) if( rand() % 2   )  mutation(new_gen[i]);
         }else  //70-100 best individuals
-            for(nmut=20; nmut>=0; nmut--) if( rand() % 2  )   mutation(new_gen[i]);
+            for(nmut=20; nmut>0; nmut--) if( rand() % 2  )   mutation(new_gen[i]);
     }
 
     /* clean up */
