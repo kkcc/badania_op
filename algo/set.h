@@ -42,7 +42,6 @@ int      clear(void) { elements.clear(); }
 ostream& to_stream(ostream& os, string sep=" ");
 int      size() { return elements.size(); }
 
-
 };
 
 

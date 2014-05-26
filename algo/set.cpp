@@ -23,7 +23,6 @@ long int Set::sum() const {
     for(std::set<int>::iterator i=elements.begin(); i!=elements.end(); i++)
         tmp += *i;
     
-
     return tmp;
 }
 

@@ -11,11 +11,17 @@
 
     #include "set.h"
 
-    #define MAX_GENERATIONS 200         //depth of generation tree to be derived from initial generation
-    #define SUBSETS 6                  //number of subsets to which main set will be partitioned
-    #define ITERATIONS 20              //maximal number of iterations = number of initial generations
-    #define INDIVIDUALS 500             //number of individuals in each generation
-    #define SURVIVORS 0.10
+ //   #define ITERATIONS 20              //maximal number of iterations = number of initial generations
+    #define ITER 0              //maximal number of iterations = number of initial generations
+ //   #define MAX_GENERATIONS 200         //depth of generation tree to be derived from initial generation
+    #define MAX_GEN 1         //depth of generation tree to be derived from initial generation
+ //   #define INDIVIDUALS 500             //number of individuals in each generation
+    #define NIND 2             //number of individuals in each generation
+ //   #define SUBSETS 6                  //number of subsets to which main set will be partitioned
+    #define SUBSETS 3                  //number of subsets to which main set will be partitioned
+    #define EPSILON 4                  //number of subsets to which main set will be partitioned
+ //   #define SURVIVORS 0.10
+    #define SURVIVORS 5
    
 
    using namespace std;
@@ -36,7 +42,7 @@
  
  */
 extern int IDEAL_SET;
-
+extern int ARGS[];
 
 typedef Set** Generation;
 typedef Set* Individual;
@@ -53,6 +59,10 @@ long int  rate_individual(Individual);
 long int absolute(long int);
 bool del(int el);
 int  compare(const void* a, const void* b);
+
+int*     load_from_file(const char* filename ,int* counter);
+void     parse_args(char** argv, int argc);
+bool     save_to_file(const char* filename, Individual ind);
 
 
 #endif
