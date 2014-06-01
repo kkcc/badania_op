@@ -159,7 +159,7 @@ Generation evolve(Generation old_gen){
         BEST_IND = copy_ind( old_gen[0] );
     }
     
-    std::cout<<"ERROR: "<<lowest_error<<"\n";
+    //std::cout<<"ERROR: "<<lowest_error<<"\n";
     if(LOWEST_ERR <= ARGS[EPSILON] ) {
         return NULL;
     }
