@@ -10,19 +10,14 @@
     #include <iostream>
 
     #include "set.h"
-
- //   #define ITERATIONS 20              //maximal number of iterations = number of initial generations
-    #define ITER 0              //maximal number of iterations = number of initial generations
- //   #define MAX_GENERATIONS 200         //depth of generation tree to be derived from initial generation
-    #define MAX_GEN 1         //depth of generation tree to be derived from initial generation
- //   #define INDIVIDUALS 500             //number of individuals in each generation
-    #define NIND 2             //number of individuals in each generation
- //   #define SUBSETS 6                  //number of subsets to which main set will be partitioned
-    #define SUBSETS 3                  //number of subsets to which main set will be partitioned
-    #define EPSILON 4                  //number of subsets to which main set will be partitioned
- //   #define SURVIVORS 0.10
-    #define SURVIVORS 5
-   
+    /* Indexes of prameter fields in ARGS[] table */
+    #define ITER 0                      //maximal number of iterations = number of initial generations
+    #define MAX_GEN 1                   //depth of generation tree to be derived from initial generation
+    #define NIND 2                      //number of individuals in each generation
+    #define SUBSETS 3                   //number of subsets to which main set will be partitioned
+    #define EPSILON 4                   //Value of error that can be accepted
+    #define SURVIVORS 5                 //percent of individuals surviving each generation
+    
 
    using namespace std;
 /* 
@@ -54,9 +49,9 @@ void print_ind(Individual);
 Individual copy_ind(Individual oldind);
 Individual crossover(Individual,Individual);
 void mutation(Individual);
-long int  rate_set(Set s, const long int goal);
-long int  rate_individual(Individual);
-long int absolute(long int);
+double  rate_set(Set s, const double goal);
+double  rate_individual(Individual);
+double absolute(double);
 bool del(int el);
 int  compare(const void* a, const void* b);
 
